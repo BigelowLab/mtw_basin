@@ -1,2 +1,44 @@
-# mtw_basin
-Compute MTW for basins at depth using Copernicus GLOBAL_ANALYSISFORECAST_PHY_001_024
+Marine Thermohaline Waves for basins
+================
+
+Can we reasonably compute MThW stats for well defined regions (basins)
+at depth using Copernicus’
+[GLOBAL_ANALYSISFORECAST_PHY_001_024](https://data.marine.copernicus.eu/product/GLOBAL_ANALYSISFORECAST_PHY_001_024/services)
+dataset?
+
+# Regions
+
+Wilkinson (gomwilkinson), Jordan (gomjordan) and Georges (gomgeorges)
+basins in the Gulf of Maine, defined using the 200m isobath. Store in
+`/mnt/s1/projects/ecocast/coredata/regions`
+
+# By pixel? or by summary stat?
+
+Do we compute longterm stats (median, mean, 10th and 90th) for each
+pixel? Or do we compute those across each basin? We’ll try by pixel as
+we do for `chfc`
+
+# Organizing data
+
+Store data under the root path
+`/mnt/s1/projects/ecocast/coredata/copernicus/mthw`.
+
+    basin_name/
+      thetao/
+        q10/
+          001.tif
+           ...
+          365.tif
+        q90/
+          001.tif
+           ...
+          365.tif
+      so/ 
+       q10/
+          001.tif
+           ...
+          365.tif
+        q90/
+          001.tif
+           ...
+          365.tif
