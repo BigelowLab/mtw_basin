@@ -1,3 +1,6 @@
+
+
+
 #' Downlaod a copernicus daily dataset
 #' 
 #' data are stored in ncdf format
@@ -14,22 +17,27 @@ fetch_gom3d = function(x,
     outpath = copernicus::copernicus_path("gom3d"),
     depth = c(0.49, 320),
     date = Sys.Date(),
-    lut = read_product_lut(x$product_id),
     ...){
   
-  
-  opath = file.path(outpath,
-                    )
-  copernicus::download_copernicus_cli_subset(
-    dataset_id = dataset_id,
-    vars = "thetao",
-    bb = sf::st_bbox(bb),
-    depth = c(0.49, 320),
+  #<root>/product_id/yyyy/mmdd/datasetid__datetime_depth_var_raw
+  ofile = file.path(outpath,
+                    x$product_id[1],
+                    format(date, "%Y"),
+                    format(date, "%m%d"),
+                    sprintf("%s__%s_multi_day_%s_raw.nc",
+                            x$dataset_id[1],
+                            format(date, "%Y-%m-%dT000000"),
+                            x$varname[1]))
+  opath = dirname(ofile)
+  if (!dir.exists(opath)) ok = dir.create(opath, recursive = TRUE)
+  ok = copernicus::download_copernicus_cli_subset(
+    dataset_id = x$dataset_id[1],
+    vars = x$varname[1],
+    bb = bb, #sf::st_bbox(bb),
+    depth = depth,
     time = c(date, date),
-    ofile = file.path(outpath, 
-                      sprintf("%s__%s_multi_day_%s_raw.nc",
-                              dataset_id[1],
-                              format(date, "%Y-%m-%dT000000"),
-                              varname[1] )),
+    ofile = ofile,
     ...)
+  names(ok) = ofile
+  ok
 }
